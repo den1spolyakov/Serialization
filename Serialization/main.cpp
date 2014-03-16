@@ -8,8 +8,6 @@ int main()
 	d.setX(23);
 	d.setY(-9);
 	d.save("test2.txt");
-	
-	
-	std::cin.get();
+
 	return 0;
 }
