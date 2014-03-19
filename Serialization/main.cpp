@@ -117,14 +117,14 @@ public:
 int main()
 {
 	Derived d;
-	d.load("");
-	d.save("");
+	d.load("input");
+	d.save("output");
 
 	{
 		Derived d2 = d;
-		d.save("");
+		d.save("input");
 	}
-	d.save("");
+	d.save("output");
 
 	return 0;
 }
