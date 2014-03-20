@@ -8,8 +8,8 @@ public:
 	std::string str;
 
 	SAVE
-		REG(a)
-		REG(str)
+            REG(a)
+	    REG(str)
 	END
 };
 
@@ -20,8 +20,8 @@ public:
 	Test1 inner;
 	
 	SAVE
-		REG(b)
-		REG(inner)
+	    REG(b)
+	    REG(inner)
 	END
 };
 
