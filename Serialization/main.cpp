@@ -41,7 +41,7 @@ int main()
 	Test2 t1;
 	rd >> t1;
 	
-	std::cout << t1.b << " {" << t1.inner.a << " " << t1.inner.str << "}\n";
+	std::cout << t1.b << " " << t1.inner.a << " " << t1.inner.str;
 
 	return 0;
 }
