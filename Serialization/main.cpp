@@ -1,130 +1,47 @@
-#include <vector>
+#include "serialization.h"
 #include <iostream>
-#include <string>
 
-#define SAVE void applySerialization() {  
-#define REGISTER(T, V) registerVariable(new Variable<T>(&V));
-#define END }
-
-class BaseVariable
+class Test1
 {
 public:
-	virtual void save(std::ostream &out) = 0;
-	virtual void load(std::istream &in) = 0;
-};
+	int a;
+	std::string str;
 
-template<typename T>
-class Variable : public BaseVariable
-{
-public:
-
-	Variable(T *var) : pointer(var)
-	{
-	}
-
-	void save(std::ostream &out)
-	{
-		out << *pointer << " ";
-	}
-
-	void load(std::istream &in)
-	{
-		in >> *pointer;
-	}
-
-private:
-	T *pointer;
-};
-
-class Base
-{
-public:
-
-	Base() 
-	{
-	}
-
-	Base(const Base &b)
-	{
-	}
-
-	Base & operator=(const Base & b)
-	{
-		return *this;
-	}
-
-	void load(const char *filePath)
-	{
-		checkRegistration();
-		for (std::vector<BaseVariable *>::iterator it = classMembers.begin();
-			it != classMembers.end(); it++)
-		{
-			(*it)->load(std::cin);
-		}
-	}
-
-	void save(const char *filePath)
-	{
-		checkRegistration();
-		for (std::vector<BaseVariable *>::iterator it = classMembers.begin();
-			it != classMembers.end(); it++)
-		{
-			(*it)->save(std::cout);
-		}
-		std::cout << std::endl;
-	}
-	
-	void checkRegistration()
-	{
-		if (classMembers.empty())
-		{
-			applySerialization();
-		}
-	}
-
-	void registerVariable(BaseVariable *variable)
-	{
-		classMembers.push_back(variable);
-	}
-
-	virtual void applySerialization() = 0;
-
-	virtual ~Base()
-	{
-		for (std::vector<BaseVariable *>::iterator it = classMembers.begin();
-			it != classMembers.end(); it++)
-		{
-			delete *it;
-		}
-	}
-
-protected:
-	std::vector<BaseVariable *> classMembers;
-};
-
-class Derived : public Base
-{
-public:
 	SAVE
-		REGISTER(int, x)
-		REGISTER(std::string, a)
+		REG(a)
+		REG(str)
 	END
+};
 
-	std::string a;
-	int x;
+class Test2
+{
+public:
+	int b;
+	Test1 inner;
+	
+	SAVE
+		REG(b)
+		REG(inner)
+	END
 };
 
 int main()
 {
-	Derived d;
-	d.load("input");
-	d.save("output");
+	Writer wr;
 
-	{
-		Derived d2 = d;
-		d.save("input");
-	}
-	d.save("output");
+	Test2 t;
+	t.b = 10;
+	t.inner.a = 25;
+	t.inner.str = "Hello!";
 
-	return 0;
+	wr << t;
+
+	Reader rd(wr.getBuffer(), wr.getSize());
+
+	Test2 t1;
+	rd >> t1;
+	
+	std::cout << t1.b << " {" << t1.inner.a << " " << t1.inner.str << "}\n";
+
+	std::cin.get();
 }
