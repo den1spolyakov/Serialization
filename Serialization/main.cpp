@@ -43,5 +43,5 @@ int main()
 	
 	std::cout << t1.b << " {" << t1.inner.a << " " << t1.inner.str << "}\n";
 
-	std::cin.get();
+	return 0;
 }
